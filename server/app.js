@@ -3,21 +3,23 @@ const express = require('express')
 let app = express()
 const body_parser = require('body-parser')
 const port = 3000
+const cors = require('cors')
 
 app.use(body_parser.json())
+app.use(cors())
 
 // Configuração para não expor dados sensíveis =)
-const env = require('dotenv').config({ path: './.env'})
+const env = require('dotenv').config({ path: './.env' })
 const db_user = env.parsed.DB_USER
 const db_pass = env.parsed.DB_PASSWORD
 const db_schema = env.parsed.DB_SCHEMA
 
 // Criando conexão com banco
 const connection = mysql.createConnection({
-  host : 'localhost',
-  user : db_user,
-  password : db_pass,
-  database : db_schema,
+  host: 'localhost',
+  user: db_user,
+  password: db_pass,
+  database: db_schema,
   multipleStatements: true
 })
 
@@ -37,7 +39,7 @@ app.listen(port, () => console.log(`Servidor rodando na porta ${port}`))
 app.get('/usuarios', (req, res) => {
   connection.query('SELECT * FROM usuarios', (err, rows, fields) => {
     if (err) {
-      return send(req,res,err,500);
+      return send(req, res, err, 500);
     }
     res.send(rows)
   })
@@ -55,12 +57,13 @@ app.get('/usuarios/:id', (req, res) => {
 
 // DELETE um Usuario
 app.delete('/usuarios/deletar/:id', (req, res) => {
-  connection.query('DELETE FROM usuarios WHERE id = ?', [req.params.id], (err, rows, fields) => {
-    if (err) {
-      throw err
-    }
-    res.send('Usuário deletado com sucesso!')
-  })
+  connection.query('DELETE FROM usuarios WHERE id = ?',
+    [req.params.id], (err, rows, fields) => {
+      if (err) {
+        throw err
+      }
+      res.send('Usuário deletado com sucesso!')
+    })
 })
 
 // CREATE Usuario
