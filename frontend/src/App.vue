@@ -1,19 +1,25 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <CrudUsers />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import Nav from "./components/Nav.vue";
+import CrudUsers from "./components/CrudUsers.vue";
+import Usuario from './services/usuarios'
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    CrudUsers,
+  },
+  mounted() {
+    Usuario.listar().then(response => {
+      console.log('mounted')
+      console.log(response)
+    })
+  },
+};
+
 </script>
 
 <style>
@@ -24,5 +30,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.logo-wrapper img {
+  max-width: 64px;
 }
 </style>
