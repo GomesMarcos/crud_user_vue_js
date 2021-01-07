@@ -17,7 +17,8 @@ const connection = mysql.createConnection({
   host : 'localhost',
   user : db_user,
   password : db_pass,
-  database : db_schema
+  database : db_schema,
+  multipleStatements: true
 })
 
 // Conectando ao banco
@@ -29,19 +30,13 @@ connection.connect((err) => {
   }
 })
 
-// CREATE TABLE `crud_vue`.`usuarios` (
-//   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-//   `nome` VARCHAR(100) NOT NULL,
-//   `email` VARCHAR(100) NOT NULL,
-//   PRIMARY KEY (`id`));
-
-// 
+// rodando aplicação na porta pré-definida
 app.listen(port, () => console.log(`Servidor rodando na porta ${port}`))
 
 // GET todos os Usuarios
 app.get('/usuarios', (req, res) => {
   connection.query('SELECT * FROM usuarios', (err, rows, fields) => {
-    if (err){ 
+    if (err) {
       return send(req,res,err,500);
     }
     res.send(rows)
@@ -51,19 +46,45 @@ app.get('/usuarios', (req, res) => {
 // GET um Usuario
 app.get('/usuarios/:id', (req, res) => {
   connection.query('SELECT * FROM usuarios WHERE id = ?', [req.params.id], (err, rows, fields) => {
-    if (err){ 
-      return send(req,res,err,500);
+    if (err) {
+      throw err
     }
     res.send(rows)
   })
 })
 
 // DELETE um Usuario
-app.get('/usuarios/:id', (req, res) => {
-  connection.query('SELECT * FROM usuarios WHERE id = ?', [req.params.id], (err, rows, fields) => {
-    if (err){ 
-      return send(req,res,err,500);
+app.delete('/usuarios/deletar/:id', (req, res) => {
+  connection.query('DELETE FROM usuarios WHERE id = ?', [req.params.id], (err, rows, fields) => {
+    if (err) {
+      throw err
     }
-    res.send(rows)
+    res.send('Usuário deletado com sucesso!')
+  })
+})
+
+// CREATE Usuario
+app.post('/usuarios/criar', (req, res) => {
+  let usuario = req.body
+  const sql = `insert into ${db_schema}.usuarios (nome, email) VALUES ('${usuario.nome}', '${usuario.email}');`
+  console.log(sql);
+  connection.query(sql, [usuario.nome, usuario.email], (err, rows, fields) => {
+    if (err) {
+      throw err
+    }
+    res.send('Usuário criado com sucesso!')
+  })
+})
+
+// UPDATE Usuario
+app.put('/usuarios/editar/:id', (req, res) => {
+  let usuario = req.body
+  const sql = `UPDATE ${db_schema}.usuarios SET nome = '${usuario.nome}', email = '${usuario.email}' WHERE id = ?;`
+  console.log(sql);
+  connection.query(sql, [parseInt(req.params.id)], (err, rows, fields) => {
+    if (err) {
+      throw err
+    }
+    res.send(`Usuário ${usuario.nome} editado com sucesso!`)
   })
 })
