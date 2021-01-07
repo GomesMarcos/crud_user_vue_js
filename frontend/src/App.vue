@@ -5,19 +5,10 @@
 <script>
 // import Nav from "./components/Nav.vue";
 import CrudUsers from "./components/CrudUsers.vue";
-import Usuario from './services/usuarios'
 
 export default {
   name: "App",
-  components: {
-    CrudUsers,
-  },
-  mounted() {
-    Usuario.listar().then(response => {
-      console.log('mounted')
-      console.log(response)
-    })
-  },
+  components: { CrudUsers },
 };
 
 </script>
