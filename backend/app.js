@@ -69,6 +69,16 @@ app.delete('/usuarios/deletar/:id', (req, res) => {
 // CREATE Usuario
 app.post('/usuarios/criar', (req, res) => {
   let usuario = req.body
+
+  // Tratando campos obrigatórios
+  if (usuario.nome === '' || usuario.nome === null || usuario.nome === undefined) {
+    throw new Error("O campo \"Nome\" é obrigatório")
+  }
+
+  if (usuario.email === '' || usuario.email === null || usuario.email === undefined) {
+    throw new Error("O campo \"E-mail\" é obrigatório")
+  }
+
   const sql = `insert into ${db_schema}.usuarios (nome, email) VALUES ('${usuario.nome}', '${usuario.email}');`
   console.log(sql);
   connection.query(sql, [usuario.nome, usuario.email], (err, rows, fields) => {

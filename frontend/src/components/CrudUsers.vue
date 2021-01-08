@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <FormUser usuarios="usuarios" />
+    <FormUser :parentUsuarios="this.usuarios" @updatedUsuarios="usuarios = $event" />
   </div>
 </template>
 
@@ -79,6 +79,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 $breakpoint: 768px;
 
 .table {
@@ -96,7 +97,7 @@ $breakpoint: 768px;
       border-bottom: lightgray;
 
       &:nth-of-type(odd) {
-        background-color: #eee;
+        background-color: #3d4244;
       }
     }
   }
@@ -143,7 +144,6 @@ th {
         float: left;
         text-transform: uppercase;
         font-weight: 700;
-        // color: gray;
 
         &:hover {
           color: lightgray;

@@ -1,7 +1,11 @@
 # frontend
 
 ## Project setup
+Recomendo usar a versão do node estável igual ou superior à v12.19.1
+
 ```
+nvm use 12
+
 npm install
 ```
 

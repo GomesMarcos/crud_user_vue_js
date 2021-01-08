@@ -25,5 +25,5 @@ frontend/pnpm-debug.log*
 *.sw?
 
 # SERVER IGNORES
-server/node_modules
-server/.env
+backend/node_modules
+backend/.env

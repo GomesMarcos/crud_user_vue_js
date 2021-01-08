@@ -1,10 +1,10 @@
 # Crud Users withs NodeJS MySQL e VueJS
 
-## Running server
+## Running backend
 
 ### Abra o terminal e execute:
 
-- cd server/
+- cd backend/
 - npm i
 - touch .env
 - criando as constantes no arquivo .env com os valores referentes ao banco:

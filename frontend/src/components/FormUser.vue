@@ -8,6 +8,8 @@
     aria-labelledby="modelTitleId"
     aria-hidden="true"
   >
+
+    <!-- Form de criação de usuário -->
     <form class="form-group" @submit.prevent="salvar">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -25,7 +27,6 @@
           </div>
 
           <div class="modal-body">
-            <!-- Form de criação de usuário -->
             <p>
               <label for="userName">Nome</label>
               <input
@@ -38,9 +39,6 @@
                 placeholder="Ex: Jonas Rasche"
                 v-model="usuario.nome"
               />
-              <small id="nomelHelpId" class="form-text text-muted"
-                >Insira o nome do usuário {{ usuario.nome }}
-              </small>
             </p>
             <p>
               <label for="userEmail">E-mail</label>
@@ -54,9 +52,6 @@
                 placeholder="usuario@exemplo.com"
                 v-model="usuario.email"
               />
-              <small id="emailHelpId" class="form-text text-muted"
-                >Insira o e-mail do usuário</small
-              >
             </p>
           </div>
 
@@ -71,7 +66,6 @@
             </button>
             <button type="submit" class="btn btn-primary">Salvar</button>
           </div>
-          <p>{{ usuarios }}</p>
         </div>
       </div>
     </form>
@@ -84,7 +78,7 @@ import Usuario from '../services/usuarios'
 export default {
   nome: 'FormUser',
   props: {
-    usuarios: {
+    parentUsuarios: {
       type: Array,
     },
   },
@@ -99,26 +93,35 @@ export default {
 
   methods: {
     salvar() {
-      Usuario.salvar(this.usuario)
-        .then(() => {
-          alert('Salvo com sucesso!')
-        })
-        .then(() => {
-          // Fechando modal após salvar usuario
-          this.fecharModal()
-          // Recarregando tabela de usuários
-          this.limparForm()
-        })
+      try {
+        Usuario.salvar(this.usuario)
+          .then(() => {
+            alert('Salvo com sucesso!')
+            // Fechando modal após salvar usuario
+            this.fecharModal()
+  
+            // Limpando form
+            this.limparForm()
+  
+            // Recarregando tabela de usuários
+            this.recarregarTabela()
+          })
+      } catch (error) {
+        console.log(error);
+      }
     },
+
     limparForm() {
       this.usuario = {}
-      this.recarregarTabela()
     },
+
     recarregarTabela() {
       Usuario.listar().then((response) => {
-        this.usuarios = response.data
+        this.parentUsuarios = response.data
+        this.$emit('updatedUsuarios', this.parentUsuarios)
       })
     },
+
     fecharModal() {
       document.getElementsByClassName('close')[0].click()
     },
@@ -126,4 +129,20 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.modal {
+  &-title, .close { color: lightcyan; }
+
+  &-header, input, &-footer { border-color: gray;}
+
+  &-content {
+    background-color: lighten(#17191A, 10%);
+
+    label { color: lightcyan; }
+
+    input {
+      background-color: #17191a;
+    }
+  }
+}
+</style>
