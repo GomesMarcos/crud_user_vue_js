@@ -1,14 +1,18 @@
 <template>
+<div>
+  <Nav />
   <CrudUsers />
+</div>
 </template>
 
 <script>
 // import Nav from "./components/Nav.vue";
+import Nav from "./components/Nav.vue";
 import CrudUsers from "./components/CrudUsers.vue";
 
 export default {
   name: "App",
-  components: { CrudUsers },
+  components: { CrudUsers, Nav },
 };
 
 </script>

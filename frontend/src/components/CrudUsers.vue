@@ -1,74 +1,84 @@
 <template>
-<div>
-  <Nav />
-  <div class="container">
-    <table class="table table-stripped table-hover nt-5">
-      <thead class="table-head">
-        <tr>
-          <th scope="col">Student Code </th>
-          <th scope="col">Percentage of marks</th>
-          <th scope="col">Grade</th>
-          <th scope="col">Remarks</th>
-        </tr>
-      </thead>
-      <tbody class="table-body">
-        <tr>
-          <td data-label="Student Code">S001</td>
-          <td data-label="percent">92</td>
-          <td data-label="grade">A+</td>
-          <td data-label="remakr">Excellent</td>
-        </tr>
-        <tr>
-          <td data-label="Student Code">S002</td>
-          <td data-label="percent">76</td>
-          <td data-label="grade">B+</td>
-          <td data-label="remakr">Good</td>
-        </tr>
-        <tr>
-          <td data-label="Student Code">S003</td>
-          <td data-label="percent">60</td>
-          <td data-label="grade">C+</td>
-          <td data-label="remakr">Regular</td>
-        </tr>
-        <tr>
-          <td data-label="Student Code">S004</td>
-          <td data-label="percent">45</td>
-          <td data-label="grade">E+</td>
-          <td data-label="remakr">Bad</td>
-        </tr>
-      </tbody>
-    </table>
+  <div>
+    <div class="container">
+      <!-- Caso o número usuários seja muito grande, um novo botão adicionar é renderizado no topo da table -->
+      <div class="row my-3 d-flex flex-end" v-if="usuarios.length > 5">
+        <div class="col text-right">
+          <!-- Button trigger modal -->
+          <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            data-toggle="modal"
+            data-target="#modalForm"
+          >
+            + Adicionar Usuário
+          </button>
+        </div>
+      </div>
+
+      <table class="table table-stripped table-hover nt-5">
+        <thead class="table-head">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nome</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+          <tr v-for="usuario of usuarios" :key="usuario.id">
+            <td data-label="ID">{{ usuario.id }}</td>
+            <td data-label="Nome">{{ usuario.nome }}</td>
+            <td data-label="E-mail">{{ usuario.email }}</td>
+            <td data-label="Ações">
+              ...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="row my-3 d-flex flex-end">
+        <div class="col text-right">
+          <!-- Button trigger modal -->
+          <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            data-toggle="modal"
+            data-target="#modalForm"
+          >
+            + Adicionar Usuário
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <FormUser usuarios="usuarios" />
   </div>
-</div>
 </template>
 
 <script>
-import Nav from "./Nav";
-import Usuarios from "../services/usuarios";
+import Usuarios from '../services/usuarios'
+import FormUser from './FormUser'
 
 export default {
-  components: { Nav },
-  name: "crud_users",
+  name: 'CrudUsers',
+  components: { FormUser },
 
   data() {
     return {
-      usuarios: []
+      usuarios: [],
     }
   },
 
   mounted() {
     Usuarios.listar().then((response) => {
-      this.usuarios = response.data;
-    })
-    .then( () => {
-      console.log('this.usuarios', this.usuarios);
+      this.usuarios = response.data
     })
   },
-};
+}
 </script>
 
 <style lang="scss">
-
 $breakpoint: 768px;
 
 .table {
@@ -77,15 +87,14 @@ $breakpoint: 768px;
   thead {
     tr > th {
       color: gray;
-      font-size: 11px;
     }
   }
 
   tbody {
     tr {
       color: darkgray;
-      font-size: 9px;
-    
+      border-bottom: lightgray;
+
       &:nth-of-type(odd) {
         background-color: #eee;
       }
@@ -95,36 +104,35 @@ $breakpoint: 768px;
 
 td,
 th {
-  border: none !important; 
+  border: none !important;
 }
 
-  .table-hover {
-
-    tbody {
-      tr:hover {
-        background-color: lighten(#343a40, 20%) !important;
-        color: lightgray !important;
-        box-shadow: 2px 2px 6px;
-        transition: linear;
-        transition-duration: 150ms;
-        transition-property: all;
-      }
+.table-hover {
+  tbody {
+    tr:hover {
+      background-color: lighten(#343a40, 20%) !important;
+      color: lightgray !important;
+      box-shadow: 2px 2px 6px;
+      transition: linear;
+      transition-duration: 150ms;
+      transition-property: all;
     }
   }
+}
 
-  @media all and (max-width: $breakpoint) {
-   table {
+@media all and (max-width: $breakpoint) {
+  table {
     border: 0;
-    
+
     thead {
       display: none;
     }
 
-    tr { 
+    tr {
       display: flex;
       flex-direction: column;
       border-bottom: 1em solid darken(gray, 15%);
-     }
+    }
 
     td {
       display: block;
@@ -142,6 +150,6 @@ th {
         }
       }
     }
-   } 
   }
+}
 </style>
