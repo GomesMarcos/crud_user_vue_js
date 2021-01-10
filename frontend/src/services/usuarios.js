@@ -7,5 +7,9 @@ export default {
 
   salvar: (usuario) => {
     return http.post('usuarios/criar', usuario)
+  },
+
+  editar: (usuario) => {
+    return http.put(`usuarios/editar/${usuario.id}`, usuario)
   }
 }
