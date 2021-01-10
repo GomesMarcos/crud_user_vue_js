@@ -1,25 +1,24 @@
 <template>
-<div>
-  <Nav />
-  <CrudUsers />
-</div>
+  <div>
+    <Nav />
+    <CrudUsers />
+  </div>
 </template>
 
 <script>
 // import Nav from "./components/Nav.vue";
-import Nav from "./components/Nav.vue";
-import CrudUsers from "./components/CrudUsers.vue";
+import Nav from './components/Nav.vue'
+import CrudUsers from './components/CrudUsers.vue'
 
 export default {
-  name: "App",
+  name: 'App',
   components: { CrudUsers, Nav },
-};
-
+}
 </script>
 
 <style>
-html, body {
-  background-color: #17191A;
+html,
+body {
   overflow-x: hidden;
 }
 
