@@ -72,15 +72,23 @@ app.post('/usuarios/criar', (req, res) => {
 
   // Tratando campos obrigatórios
   if (usuario.nome === '' || usuario.nome === null || usuario.nome === undefined) {
-    throw new Error("O campo \"Nome\" é obrigatório")
+    const erro = {
+      status: 500,
+      msg: 'O campo "Nome" é obrigatório'
+    }
+    
+    return res.send(erro)
   }
-
   if (usuario.email === '' || usuario.email === null || usuario.email === undefined) {
-    throw new Error("O campo \"E-mail\" é obrigatório")
+    const erro = {
+      status: 500,
+      msg: 'O campo "E-mail" é obrigatório'
+    }
+    
+    return res.send(erro)
   }
 
   const sql = `insert into ${db_schema}.usuarios (nome, email) VALUES ('${usuario.nome}', '${usuario.email}');`
-  console.log(sql);
   connection.query(sql, [usuario.nome, usuario.email], (err, rows, fields) => {
     if (err) {
       throw err
@@ -92,8 +100,26 @@ app.post('/usuarios/criar', (req, res) => {
 // UPDATE Usuario
 app.put('/usuarios/editar/:id', (req, res) => {
   let usuario = req.body
+
+  // Tratando campos obrigatórios
+  if (usuario.nome === '' || usuario.nome === null || usuario.nome === undefined) {
+    const erro = {
+      status: 500,
+      msg: 'O campo "Nome" é obrigatório'
+    }
+    
+    return res.send(erro)
+  }
+  if (usuario.email === '' || usuario.email === null || usuario.email === undefined) {
+    const erro = {
+      status: 500,
+      msg: 'O campo "E-mail" é obrigatório'
+    }
+    
+    return res.send(erro)
+  }
+  
   const sql = `UPDATE ${db_schema}.usuarios SET nome = '${usuario.nome}', email = '${usuario.email}' WHERE id = ?;`
-  console.log(sql);
   connection.query(sql, [parseInt(req.params.id)], (err, rows, fields) => {
     if (err) {
       throw err
