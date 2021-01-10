@@ -73,19 +73,17 @@ app.post('/usuarios/criar', (req, res) => {
   // Tratando campos obrigatórios
   if (usuario.nome === '' || usuario.nome === null || usuario.nome === undefined) {
     const erro = {
-      status: 500,
+      status: 400,
       msg: 'O campo "Nome" é obrigatório'
     }
-    
-    return res.send(erro)
+    return res.send(erro)    
   }
   if (usuario.email === '' || usuario.email === null || usuario.email === undefined) {
     const erro = {
-      status: 500,
+      status: 400,
       msg: 'O campo "E-mail" é obrigatório'
     }
-    
-    return res.send(erro)
+    return res.send(erro)    
   }
 
   const sql = `insert into ${db_schema}.usuarios (nome, email) VALUES ('${usuario.nome}', '${usuario.email}');`
@@ -104,18 +102,16 @@ app.put('/usuarios/editar/:id', (req, res) => {
   // Tratando campos obrigatórios
   if (usuario.nome === '' || usuario.nome === null || usuario.nome === undefined) {
     const erro = {
-      status: 500,
+      status: 400,
       msg: 'O campo "Nome" é obrigatório'
     }
-    
     return res.send(erro)
   }
   if (usuario.email === '' || usuario.email === null || usuario.email === undefined) {
     const erro = {
-      status: 500,
+      status: 400,
       msg: 'O campo "E-mail" é obrigatório'
     }
-    
     return res.send(erro)
   }
   
