@@ -44,6 +44,7 @@ export default {
   data() {
     return {
       updatedUsuarios: [],
+      toast: {},
     }
   },
 
@@ -51,17 +52,17 @@ export default {
     deletarUsuario() {
       Usuario.deletar(this.parentUsuario).then((res) => {
         if (res.data.status !== 400) {
-          this.msgToast = 'Deletado com sucesso!'
-          this.exibirToast()
+          const msgToast = res.data.msg
+          this.exibirToast(msgToast, 200)
 
-          // Fechando modal após salvar usuario
+          // Fechando modal após editar usuario
           this.fecharModal()
 
           // Recarregando tabela de usuários
           this.recarregarTabela()
         } else {
-          this.msgToast = res.data.msg
-          this.exibirToast()
+          const msgToast = res.data.msg
+          this.exibirToast(msgToast, 400)
         }
       })
     },
@@ -74,15 +75,21 @@ export default {
     },
 
     fecharModal() {
-      document.getElementsByClassName('close')[0].click()
+      document.getElementById('confirmDelete').click()
     },
 
-    exibirToast() {
-      const toast = document.getElementsByClassName('toast')[0]
-      toast.classList.add('show')
+    exibirToast(msg, status) {
+      // Emitindo valor atualizado parao componente Toast
+      this.toast.msg = msg
+      this.toast.status = status
+      this.$emit('updateToast', this.toast)
+
+      // Exibindo o toast na tela
+      this.toastHTML = document.getElementById('toast')
+      this.toastHTML.classList.add('show')
       setTimeout(() => {
-        toast.classList.remove('show')
-      }, 1500)
+        this.toastHTML.classList.remove('show')
+      }, 2000)
     },
   },
 }
