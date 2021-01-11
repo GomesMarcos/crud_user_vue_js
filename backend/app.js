@@ -62,7 +62,7 @@ app.delete('/usuarios/deletar/:id', (req, res) => {
       if (err) {
         throw err
       }
-      res.send('Usuário deletado com sucesso!')
+      res.send({msg: 'Usuário deletado com sucesso!'})
     })
 })
 
@@ -91,7 +91,7 @@ app.post('/usuarios/criar', (req, res) => {
     if (err) {
       throw err
     }
-    res.send('Usuário criado com sucesso!')
+    res.send({msg: 'Usuário criado com sucesso!'})
   })
 })
 
@@ -120,6 +120,6 @@ app.put('/usuarios/editar/:id', (req, res) => {
     if (err) {
       throw err
     }
-    res.send(`Usuário ${usuario.nome} editado com sucesso!`)
+    res.send({msg: `Usuário ${usuario.nome} editado com sucesso!`})
   })
 })

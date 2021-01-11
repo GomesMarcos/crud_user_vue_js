@@ -141,11 +141,10 @@ $breakpoint: 768px;
 
   tbody {
     tr {
-      color: darkgray;
+      color: #343a40;
       border-bottom: lightgray;
 
       &:nth-of-type(odd) {
-        color: lightgray;
         background-color: #999;
       }
     }
