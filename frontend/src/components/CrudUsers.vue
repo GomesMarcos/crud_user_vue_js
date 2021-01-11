@@ -27,25 +27,41 @@
         </thead>
         <tbody class="table-body">
           <tr v-for="usuario of usuarios" :key="usuario.id">
-            <td data-label="ID">{{ usuario.id }}</td>
-            <td data-label="Nome">{{ usuario.nome }}</td>
-            <td data-label="E-mail">{{ usuario.email }}</td>
+            <td data-label="ID">
+              <div class="d-flex py-2 align-items-center">
+                {{ usuario.id }}
+              </div>
+            </td>
+            <td data-label="Nome">
+              <div class="d-flex py-2 align-items-center">
+                {{ usuario.nome }}
+              </div>
+            </td>
+            <td data-label="E-mail">
+              <div class="d-flex py-2 align-items-center">
+                {{ usuario.email }}
+              </div>
+            </td>
             <td data-label="Ações">
-              <div class="d-flex flex-column align-items-center">
+              <div class="d-flex justify-content-end">
                 <button
-                  class="btn btn-secondary text-uppercase w-50"
+                  class="btn btn-secondary btn-actions text-uppercase mr-3"
                   @click="setUsuarioClicado(usuario)"
                   data-toggle="modal"
                   data-target="#modalFormEdit"
-                  >atualizar {{ usuario.nome }}</button
                 >
+                  <i class="material-icons left">update</i>
+                  <div class="btn-actions-tooltip">Atualizar<br />{{ usuario.nome }}</div>
+                </button>
                 <button
-                  class="btn btn-danger text-uppercase w-50"
+                  class="btn btn-danger btn-actions text-uppercase"
                   @click="setUsuarioClicado(usuario)"
                   data-toggle="modal"
                   data-target="#confirmDelete"
-                  >deletar {{ usuario.nome }}</button
                 >
+                  <i class="material-icons left">delete</i>
+                  <div class="btn-actions-tooltip">Deletar<br />{{ usuario.nome }}</div>
+                </button>
               </div>
             </td>
           </tr>
@@ -143,6 +159,9 @@ $breakpoint: 768px;
     tr {
       color: #343a40;
       border-bottom: lightgray;
+      transition: linear;
+      transition-duration: 150ms;
+      transition-property: all;
 
       &:nth-of-type(odd) {
         background-color: #999;
@@ -164,9 +183,45 @@ th {
       background-color: lighten(#999, 20%) !important;
       color: #222;
       box-shadow: 2px 2px 6px;
-      transition: linear;
-      transition-duration: 150ms;
-      transition-property: all;
+
+      .btn-actions {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.btn-actions {
+  visibility: hidden;
+  opacity: 0;
+  padding: 0.5rem;
+  transition: linear;
+  transition-duration: 0.3s;
+  transition-property: all;
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  display: flex;
+
+  &-tooltip {
+    position: absolute;
+    bottom: -3.5rem;
+    z-index: 999;
+    visibility: hidden;
+    opacity: 0;
+    transition: ease all 0.2s;
+    transition-delay: 0.3s;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 0.1rem 0.5rem;
+    border-radius: 5px;
+  }
+
+  &:hover {
+    .btn-actions-tooltip {
+      opacity: 1;
+      visibility: visible;
     }
   }
 }
@@ -199,6 +254,12 @@ th {
           color: lightgray;
         }
       }
+    }
+
+    .btn-actions {
+      visibility: visible;
+      opacity: 1;
+      position: relative;
     }
   }
 }
