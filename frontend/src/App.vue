@@ -16,10 +16,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 html,
 body {
   overflow-x: hidden;
+
+  &.modal-open {
+    padding: 0 !important;
+  }
 }
 
 #app {

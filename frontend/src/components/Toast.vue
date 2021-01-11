@@ -1,35 +1,41 @@
 <template>
-  <div class="toast" :class="statusToast === 'success' ? 'text-success' : 'text-danger'">
-    <div class="toast-body">
-      {{ msgToast }}
-    </div>
+  <div
+    class="toast alert "
+    :class="statusToast === 200 ? 'alert-success show' : 'alert-danger show'"
+    id="toast"
+  >
+    <span>{{ msgToast }}</span>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      msgToast: '',
-      statusToast: '',
-    }
+  props: {
+    msgToast: {
+      type: String,
+    },
+    statusToast: {
+      type: Number,
+    },
+  },
+
+  /* Para exibir o toast foi necessário adicionar a clsase 'show'
+  no HTML e removê-la ao montar o componente. */
+  mounted() {
+    document.getElementById('toast').classList.remove('show')
   },
 }
 </script>
 
 <style lang="scss">
 .toast {
-  position: absolute;
-  background-color: lightgray;
-  left: 0;
-  right: 0;
-  margin: auto;
-  top: 25vh;
-  width: 256px;
+  position: fixed;
+  right: 32px;
+  top: 32px;
   opacity: 0;
   visibility: hidden;
-  border: 1px solid gray;
-  border-radius: 10px;
+  border: 2px solid;
+  // border-radius: 10px;
   text-align: center;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;

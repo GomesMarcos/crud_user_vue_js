@@ -104,7 +104,7 @@ export default {
       usuarioClicado: {},
       toast: {
         msg: '',
-        status: '',
+        status: 400,
       },
     }
   },
@@ -118,6 +118,10 @@ export default {
   methods: {
     setUsuarioClicado(usuario) {
       this.usuarioClicado = usuario
+    },
+
+    updateToast(toast) {
+      this.toast = toast
     },
   },
 }

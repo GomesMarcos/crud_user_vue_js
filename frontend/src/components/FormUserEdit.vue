@@ -19,6 +19,7 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
+              id="closeModalEdit"
               @click="limparForm"
             >
               <span aria-hidden="true">&times;</span>
@@ -86,8 +87,9 @@ export default {
   },
   data() {
     return {
-      msgToast: '',
+      toast: {},
       updatedUsuarios: [],
+      toastHTML: null,
     }
   },
 
@@ -95,8 +97,8 @@ export default {
     atualizar() {
       Usuario.editar(this.parentUsuarioEditado).then((res) => {
         if (res.data.status !== 400) {
-          this.msgToast = 'Atualização realizada com sucesso!'
-          this.exibirToast('text-success')
+          const msgToast = res.data.msg
+          this.exibirToast(msgToast, 200)
 
           // Fechando modal após editar usuario
           this.fecharModal()
@@ -107,8 +109,8 @@ export default {
           // Recarregando tabela de usuários
           this.recarregarTabela()
         } else {
-          this.msgToast = res.data.msg
-          this.exibirToast('text-danger')
+          const msgToast = res.data.msg
+          this.exibirToast(msgToast, 400)
         }
       })
     },
@@ -125,17 +127,21 @@ export default {
     },
 
     fecharModal() {
-      document.getElementsByClassName('close')[0].click()
+      document.getElementById('closeModalEdit').click()
     },
 
-    exibirToast(textClass) {
-      const toast = document.getElementsByClassName('toast')[0]
-      toast.classList.add('show')
-      toast.classList.add(textClass.toString())
+    exibirToast(msg, status) {
+      // Emitindo valor atualizado parao componente Toast
+      this.toast.msg = msg
+      this.toast.status = status
+      this.$emit('updateToast', this.toast)
+
+      // Exibindo o toast na tela
+      this.toastHTML = document.getElementById('toast')
+      this.toastHTML.classList.add('show')
       setTimeout(() => {
-        toast.classList.remove('show')
-        toast.classList.remove(textClass.toString())
-      }, 1500)
+        this.toastHTML.classList.remove('show')
+      }, 2000)
     },
   },
 }
