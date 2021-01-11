@@ -22,7 +22,7 @@
             <th scope="col">ID</th>
             <th scope="col">Nome</th>
             <th scope="col">E-mail</th>
-            <th scope="col">Ações</th>
+            <th class="text-center" scope="col">Ações</th>
           </tr>
         </thead>
         <tbody class="table-body">
@@ -31,7 +31,22 @@
             <td data-label="Nome">{{ usuario.nome }}</td>
             <td data-label="E-mail">{{ usuario.email }}</td>
             <td data-label="Ações">
-              ...
+              <div class="d-flex flex-column align-items-center">
+                <button
+                  class="btn btn-secondary text-uppercase w-50"
+                  @click="setUsuarioClicado(usuario)"
+                  data-toggle="modal"
+                  data-target="#modalFormEdit"
+                  >atualizar {{ usuario.nome }}</button
+                >
+                <button
+                  class="btn btn-danger text-uppercase w-50"
+                  @click="setUsuarioClicado(usuario)"
+                  data-toggle="modal"
+                  data-target="#confirmDelete"
+                  >deletar {{ usuario.nome }}</button
+                >
+              </div>
             </td>
           </tr>
         </tbody>
@@ -52,34 +67,63 @@
       </div>
     </div>
 
-    <FormUser :parentUsuarios="this.usuarios" @updatedUsuarios="usuarios = $event" />
+    <FormUser
+      :parentUsuarios="usuarios"
+      @updatedUsuarios="usuarios = $event"
+      @updateToast="toast = $event"
+    />
+    <FormUserEdit
+      :parentUsuarioEditado="usuarioClicado"
+      :parentUsuarios="usuarios"
+      @updatedUsuarios="usuarios = $event"
+      @updateToast="toast = $event"
+    />
+    <ConfirmDelete
+      :parentUsuario="usuarioClicado"
+      @updatedUsuarios="usuarios = $event"
+      @updateToast="toast = $event"
+    />
+    <Toast :msgToast="toast.msg" :statusToast="toast.status" />
   </div>
 </template>
 
 <script>
 import Usuarios from '../services/usuarios'
 import FormUser from './FormUser'
+import FormUserEdit from './FormUserEdit'
+import ConfirmDelete from './ConfirmDelete'
+import Toast from './Toast'
 
 export default {
   name: 'CrudUsers',
-  components: { FormUser },
+  components: { FormUser, FormUserEdit, ConfirmDelete, Toast },
 
   data() {
     return {
       usuarios: [],
+      usuarioClicado: {},
+      toast: {
+        msg: '',
+        status: '',
+      },
     }
   },
 
   mounted() {
-    Usuarios.listar().then((response) => {
-      this.usuarios = response.data
+    Usuarios.listar().then((res) => {
+      this.usuarios = res.data
     })
+  },
+
+  methods: {
+    setUsuarioClicado(usuario) {
+      this.usuarioClicado = usuario
+    },
   },
 }
 </script>
 
 <style lang="scss">
-
 $breakpoint: 768px;
 
 .table {
@@ -87,7 +131,7 @@ $breakpoint: 768px;
 
   thead {
     tr > th {
-      color: gray;
+      color: #222;
     }
   }
 
@@ -97,7 +141,8 @@ $breakpoint: 768px;
       border-bottom: lightgray;
 
       &:nth-of-type(odd) {
-        background-color: #3d4244;
+        color: lightgray;
+        background-color: #999;
       }
     }
   }
@@ -111,8 +156,10 @@ th {
 .table-hover {
   tbody {
     tr:hover {
-      background-color: lighten(#343a40, 20%) !important;
-      color: lightgray !important;
+      position: relative;
+      z-index: 999;
+      background-color: lighten(#999, 20%) !important;
+      color: #222;
       box-shadow: 2px 2px 6px;
       transition: linear;
       transition-duration: 150ms;

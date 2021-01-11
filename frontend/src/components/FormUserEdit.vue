@@ -1,19 +1,19 @@
 <template>
   <!-- Modal -->
   <div
-    class="modal"
-    id="modalForm"
+    class="modal fade"
+    id="modalFormEdit"
     tabindex="-1"
     role="dialog"
     aria-labelledby="modelTitleId"
     aria-hidden="true"
   >
-    <!-- Form de criação de usuário -->
-    <form class="form-group" @submit.prevent="salvar">
+    <!-- Form de edição de usuário -->
+    <form class="form-group" @submit.prevent="atualizar">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Adicionar Novo Usuário</h5>
+            <h5 class="modal-title">Editar Usuário</h5>
             <button
               type="button"
               class="close"
@@ -36,7 +36,7 @@
                 id="userName"
                 aria-describedby="nomelHelpId"
                 placeholder="Ex: Jonas Rasche"
-                v-model="usuario.nome"
+                v-model="parentUsuarioEditado.nome"
               />
             </p>
             <p>
@@ -49,7 +49,7 @@
                 id="userEmail"
                 aria-describedby="emailHelpId"
                 placeholder="usuario@exemplo.com"
-                v-model="usuario.email"
+                v-model="parentUsuarioEditado.email"
               />
             </p>
           </div>
@@ -80,26 +80,25 @@ export default {
     parentUsuarios: {
       type: Array,
     },
+    parentUsuarioEditado: {
+      type: Object,
+    },
   },
   data() {
     return {
-      usuario: {
-        nome: '',
-        email: '',
-      },
       msgToast: '',
       updatedUsuarios: [],
     }
   },
 
   methods: {
-    salvar() {
-      Usuario.salvar(this.usuario).then((res) => {
+    atualizar() {
+      Usuario.editar(this.parentUsuarioEditado).then((res) => {
         if (res.data.status !== 400) {
-          this.msgToast = 'Salvo com sucesso!'
-          this.exibirToast()
+          this.msgToast = 'Atualização realizada com sucesso!'
+          this.exibirToast('text-success')
 
-          // Fechando modal após salvar usuario
+          // Fechando modal após editar usuario
           this.fecharModal()
 
           // Limpando form
@@ -109,7 +108,7 @@ export default {
           this.recarregarTabela()
         } else {
           this.msgToast = res.data.msg
-          this.exibirToast()
+          this.exibirToast('text-danger')
         }
       })
     },
@@ -129,11 +128,13 @@ export default {
       document.getElementsByClassName('close')[0].click()
     },
 
-    exibirToast() {
+    exibirToast(textClass) {
       const toast = document.getElementsByClassName('toast')[0]
       toast.classList.add('show')
+      toast.classList.add(textClass.toString())
       setTimeout(() => {
         toast.classList.remove('show')
+        toast.classList.remove(textClass.toString())
       }, 1500)
     },
   },

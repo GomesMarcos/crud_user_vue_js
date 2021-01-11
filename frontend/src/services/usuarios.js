@@ -11,5 +11,9 @@ export default {
 
   editar: (usuario) => {
     return http.put(`usuarios/editar/${usuario.id}`, usuario)
+  },
+
+  deletar: (usuario) => {
+    return http.delete(`usuarios/deletar/${usuario.id}`, usuario)
   }
 }
